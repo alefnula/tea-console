@@ -1,0 +1,4 @@
+pytz==2020.1
+rich==5.2.1
+typer==0.3.2
+tzlocal==2.1
