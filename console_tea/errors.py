@@ -39,7 +39,7 @@ class InvalidConfiguration(ConsoleTeaError):
         if message is not None:
             super().__init__(message=message)
         else:
-            error_msg = "" if error is None else f" Error: {error}"
+            error_msg = "" if error is None else f" {error}"
             if key is None:
                 if value is None:
                     message = f"Configuration {operation} error.{error_msg}"

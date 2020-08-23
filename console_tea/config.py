@@ -1,8 +1,10 @@
 import io
 import os
+import json
 from dataclasses import dataclass
+from collections import defaultdict
 from configparser import ConfigParser
-from typing import List, Dict, Type, Optional, Callable, Any
+from typing import List, Dict, Optional, Callable, Any, Type
 
 import pytz
 import tzlocal
@@ -58,33 +60,47 @@ class Config(Singleton):
         self.format: ConsoleFormat = ConsoleFormat.text
         self.timezone = tzlocal.get_localzone()
         self.log_dir = os.path.join(os.path.dirname(config_file), "logs")
+        self.load()
+        self.save()
 
     @property
-    def entries(self) -> List[ConfigEntry]:
-        return [
-            ConfigEntry(key=field, value=getattr(self, field))
-            for field in self.ENTRIES
-        ]
+    def entries(self) -> Dict[str, List[ConfigEntry]]:
+        result = defaultdict(list)
+        for key, field in self.ENTRIES.items():
+            result[field.section].append(
+                ConfigEntry(key=field.option, value=self.get(key))
+            )
+        return result
 
-    def set(self, field, value):
+    def set(self, field: str, value: str):
+        """Set field value from string."""
         try:
             if field not in self.ENTRIES:
                 raise ValueError(f"Invalid configuration key: {field}")
 
             entry = self.ENTRIES[field]
-            if entry.type == bool:
-                if value.lower() in ("true", "false", "on", "off"):
-                    value = value.lower() in ("true", "on")
-                else:
-                    raise ValueError(f"Invalid boolean value: {value}")
-            elif entry.type == int:
-                value = int(value, 10)
-            elif entry.type == float:
-                value = float(value)
+            # Quote string if it's not already quoted
+            if (
+                entry.type == str
+                and not (value.startswith('"') and value.endswith('"'))
+                and value.strip().lower() != "null"
+            ):
+                value = fr'"{value}"'
 
-            if entry.to_value:
+            # Load the value
+            try:
+                value = json.loads(value)
+            except Exception:
+                raise ValueError(
+                    f"Cannot parse '{value}' as '{entry.type.__name__}'."
+                )
+            if value is not None and not isinstance(value, entry.type):
+                raise ValueError(
+                    f"Type mismatch. {entry.type.__name__} != "
+                    f"{type(value).__name__}"
+                )
+            if entry.to_value is not None:
                 value = entry.to_value(value)
-
             setattr(self, field, value)
         except ValueError as e:
             raise errors.InvalidConfiguration(
@@ -93,6 +109,14 @@ class Config(Singleton):
                 operation=errors.InvalidConfiguration.Op.set,
                 error=e,
             )
+
+    def get(self, field: str) -> str:
+        """Get string representation of field."""
+        entry = self.ENTRIES[field]
+        value = getattr(self, field)
+        if entry.to_string is not None:
+            value = entry.to_string(value)
+        return json.dumps(value)
 
     def load(self):
         """Load configuration."""
@@ -110,7 +134,8 @@ class Config(Singleton):
         for field, entry in self.ENTRIES.items():
             try:
                 if cp.has_option(entry.section, entry.option):
-                    self.set(field, cp.get(entry.section, entry.option))
+                    value = cp.get(entry.section, entry.option)
+                    self.set(field, value)
             except errors.InvalidConfiguration:
                 raise
             except Exception as e:
@@ -132,18 +157,12 @@ class Config(Singleton):
             for field, entry in self.ENTRIES.items():
                 if not cp.has_section(entry.section):
                     cp.add_section(entry.section)
-
-                value = getattr(self, field)
-                value = (
-                    entry.to_string(value)
-                    if entry.to_string is not None
-                    else str(value)
-                )
-
-                cp.set(entry.section, entry.option, value)
+                cp.set(entry.section, entry.option, self.get(field))
 
             with io.open(self._config_file, "w") as f:
                 cp.write(f)
+        except errors.InvalidConfiguration:
+            raise
         except Exception as e:
             raise errors.InvalidConfiguration(
                 operation=errors.InvalidConfiguration.Op.save, error=e
@@ -151,9 +170,15 @@ class Config(Singleton):
 
     @classmethod
     def get_application_config(cls) -> "Config":
-        subclasses = cls.__subclasses__()
-        if len(subclasses) != 1:
-            raise errors.InvalidConfiguration(
-                "There should be only one subclass of Config."
-            )
-        return subclasses[0].instance
+        """Finds the application config."""
+        klass = cls
+        while True:
+            subclasses = klass.__subclasses__()
+            if len(subclasses) == 0:
+                return klass.instance
+            elif len(subclasses) == 1:
+                klass = subclasses[0]
+            else:
+                raise errors.InvalidConfiguration(
+                    "There should be a straight line of config inheritance."
+                )

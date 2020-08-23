@@ -72,10 +72,13 @@ def command(
             try:
                 config = Config.get_application_config()
                 result = func(*args, **kwargs)
-                if model is not None:
-                    output(fmt=config.format, model=model, objs=result)
-                else:
-                    return output(fmt=config.format, model=None, objs=result)
+                if result is not None:
+                    if model is not None:
+                        output(fmt=config.format, model=model, objs=result)
+                    else:
+                        return output(
+                            fmt=config.format, model=None, objs=result
+                        )
             except errors.ConsoleTeaError as e:
                 config = Config.get_application_config()
                 if config.format == config.Format.text:
