@@ -6,10 +6,10 @@ from typing import List, Dict, Type, Optional, Callable, Any
 
 import pytz
 import tzlocal
+from tea.dsa.singleton import Singleton
 
 from console_tea import errors
 from console_tea.enums import ConsoleFormat
-from console_tea.singleton import Singleton
 from console_tea.table import Column, RichTableMixin
 
 
