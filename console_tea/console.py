@@ -2,10 +2,10 @@ import functools
 from typing import List, Union, Type, Optional
 
 import typer
+from tea import serde
 from rich import print
 from rich.console import Console
 
-from console_tea import serde
 from console_tea import errors
 from console_tea.config import Config
 from console_tea.enums import ConsoleFormat
