@@ -1,7 +1,7 @@
 # CHANGELOG
 
 
-## v0.0.3 (August XX, 2020)
+## v0.0.3 (August 24, 2020)
 
 - Better error reporting.
 - Rename project to tea-console.
