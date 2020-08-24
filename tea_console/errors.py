@@ -1,19 +1,11 @@
 import enum
 from typing import Optional
 
+from tea import errors
 
-class ConsoleTeaError(Exception):
-    def __init__(self, message: str):
-        self.message = message
 
-    @property
-    def class_name(self):
-        return self.__class__.__name__
-
-    def __str__(self):
-        return f"{self.class_name}({self.message})"
-
-    __repr__ = __str__
+class ConsoleTeaError(errors.TeaError):
+    pass
 
 
 class InvalidConfiguration(ConsoleTeaError):

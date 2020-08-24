@@ -3,10 +3,10 @@ from typing import List, Union, Type, Optional
 
 import typer
 from tea import serde
+from tea import errors
 from rich import print
 from rich.console import Console
 
-from tea_console import errors
 from tea_console.config import Config
 from tea_console.enums import ConsoleFormat
 from tea_console.table import RichTableMixin
@@ -79,7 +79,7 @@ def command(
                         return output(
                             fmt=config.format, model=None, objs=result
                         )
-            except errors.ConsoleTeaError as e:
+            except errors.TeaError as e:
                 config = Config.get_application_config()
                 if config.format == config.Format.text:
                     print(f"[red]{e.message}[/red]")
