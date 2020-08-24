@@ -1,6 +1,6 @@
 .PHONY: help clean test check fmt build release
 .DEFAULT_GOAL := help
-PROJECT := console_tea
+PROJECT := tea_console
 
 help:                ## Show help.
 	@grep -E '^[a-zA-Z2_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

@@ -2,10 +2,10 @@ import typer
 from rich import print
 
 from tea import serde
-from console_tea.config import Config
-from console_tea.console import command
-from console_tea.config import ConfigEntry
-from console_tea.engine.config_engine import ConfigEngine
+from tea_console.config import Config
+from tea_console.console import command
+from tea_console.config import ConfigEntry
+from tea_console.engine.config_engine import ConfigEngine
 
 
 app = typer.Typer(name="config", help="Configuration set/get.")

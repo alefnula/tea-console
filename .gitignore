@@ -7,7 +7,7 @@ __pycache__/
 .ipynb_checkpoints
 
 # Build artifacts
-console_tea.egg-info
+tea_console.egg-info
 build/
 dist/
 

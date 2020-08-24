@@ -9,7 +9,7 @@ author_email = "alefnula@gmail.com"
 
 def get_version():
     """Import the version module and get the project version from it."""
-    version_py = Path(__file__).parent / "console_tea" / "version.py"
+    version_py = Path(__file__).parent / "tea_console" / "version.py"
     spec = importlib.util.spec_from_file_location("version", version_py)
     version = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(version)
@@ -17,7 +17,7 @@ def get_version():
 
 
 setup(
-    name="console-tea",
+    name="tea-console",
     version=get_version(),
     author=author,
     author_email=author_email,
@@ -26,7 +26,7 @@ setup(
     description="Set of helpers for developing console apps.",
     long_description=io.open("README.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/alefnula/console-tea",
+    url="https://github.com/alefnula/tea-console",
     platforms=["Windows", "POSIX", "MacOSX"],
     classifiers=[
         "Programming Language :: Python :: 3",
