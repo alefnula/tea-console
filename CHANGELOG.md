@@ -1,7 +1,16 @@
 # CHANGELOG
 
 
-## v0.0.3 (August XX, 2020)
+## v0.0.4 (August 24, 2020)
+
+- Use TeaError as a base class for errors.
+- In console catch all TeaError's, not just ConsoleTeaErrors.
+
+
+---
+
+
+## v0.0.3 (August 24, 2020)
 
 - Better error reporting.
 - Rename project to tea-console.
