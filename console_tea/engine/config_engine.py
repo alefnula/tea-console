@@ -13,6 +13,11 @@ class ConfigEngine:
     @classmethod
     def set(cls, key: str, value: str):
         config = Config.get_application_config()
+        if key.count(".") != 1:
+            raise ValueError(
+                f"Invalid configuration key: {key}. "
+                f"Valid format: `section.option`"
+            )
         section, option = key.split(".")
         try:
             for key, field in config.ENTRIES.items():
