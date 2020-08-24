@@ -10,9 +10,9 @@ import pytz
 import tzlocal
 from tea.dsa.singleton import Singleton
 
-from console_tea import errors
-from console_tea.enums import ConsoleFormat
-from console_tea.table import Column, RichTableMixin
+from tea_console import errors
+from tea_console.enums import ConsoleFormat
+from tea_console.table import Column, RichTableMixin
 
 
 @dataclass

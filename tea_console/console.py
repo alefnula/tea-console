@@ -6,10 +6,10 @@ from tea import serde
 from rich import print
 from rich.console import Console
 
-from console_tea import errors
-from console_tea.config import Config
-from console_tea.enums import ConsoleFormat
-from console_tea.table import RichTableMixin
+from tea_console import errors
+from tea_console.config import Config
+from tea_console.enums import ConsoleFormat
+from tea_console.table import RichTableMixin
 
 
 def output(

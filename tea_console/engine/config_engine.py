@@ -1,6 +1,6 @@
 from typing import List, Dict
-from console_tea import errors
-from console_tea.config import ConfigEntry, Config
+from tea_console import errors
+from tea_console.config import ConfigEntry, Config
 
 
 class ConfigEngine:
