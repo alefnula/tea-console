@@ -7,7 +7,7 @@ from tea import errors
 from rich import print
 from rich.console import Console
 
-from tea_console.config import Config
+from tea_console.config import TeaConsoleConfig
 from tea_console.enums import ConsoleFormat
 from tea_console.table import RichTableMixin
 
@@ -70,7 +70,7 @@ def command(
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             try:
-                config = Config.get_application_config()
+                config = TeaConsoleConfig.get_application_config()
                 result = func(*args, **kwargs)
                 if result is not None:
                     if model is not None:
@@ -80,7 +80,7 @@ def command(
                             fmt=config.format, model=None, objs=result
                         )
             except errors.TeaError as e:
-                config = Config.get_application_config()
+                config = TeaConsoleConfig.get_application_config()
                 if config.format == config.Format.text:
                     print(f"[red]{e.message}[/red]")
                 elif config.format == config.Format.json:

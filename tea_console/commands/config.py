@@ -2,9 +2,9 @@ import typer
 from rich import print
 
 from tea import serde
-from tea_console.config import Config
 from tea_console.console import command
 from tea_console.config import ConfigEntry
+from tea_console.config import TeaConsoleConfig
 from tea_console.engine.config_engine import ConfigEngine
 
 
@@ -14,7 +14,7 @@ app = typer.Typer(name="config", help="Configuration set/get.")
 @command(app, model=ConfigEntry, name="list")
 def list_values():
     """List all configuration values."""
-    config = Config.get_application_config()
+    config = TeaConsoleConfig.get_application_config()
     if config.format == config.Format.text:
         for i, (key, entries) in enumerate(ConfigEngine.list().items()):
             if i > 0:
