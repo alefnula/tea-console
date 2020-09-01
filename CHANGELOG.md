@@ -1,6 +1,16 @@
 # CHANGELOG
 
 
+## v0.0.5 (September 01, 2020)
+
+- Fixes.
+- Dependency update.
+- Rename `Config` to `TeaConsoleConfig. 
+
+
+---
+
+
 ## v0.0.4 (August 24, 2020)
 
 - Use TeaError as a base class for errors.

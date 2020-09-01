@@ -34,7 +34,7 @@ class ConfigEntry(RichTableMixin):
     value: Any
 
 
-class Config(Singleton):
+class TeaConsoleConfig(Singleton):
     Format = ConsoleFormat
 
     ENTRIES: Dict[str, ConfigField] = {
@@ -169,7 +169,7 @@ class Config(Singleton):
             )
 
     @classmethod
-    def get_application_config(cls) -> "Config":
+    def get_application_config(cls) -> "TeaConsoleConfig":
         """Finds the application config."""
         klass = cls
         while True:
